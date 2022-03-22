@@ -3,142 +3,136 @@
 
 
 Board::Board () {
-    wr_board.reset();
-    wb_board.reset();
-    wn_board.reset();
-    wp_board.reset();
-    wq_board.reset();
-    wk_board.reset();
-    bp_board.reset();
-    br_board.reset();
-    bb_board.reset();
-    bn_board.reset();
-    bq_board.reset();
-    bk_board.reset();
+
+    // possible unnecessary step TODO 
 }
 
 
 void Board::load_from_fen(std::string fen) {
 
-    int rank = 0;
-    int file = 0;
+    // reset all bitboards
+    reset_boards();
+
+    int rank = 8;
+    int file = 8;
     int board_index = 0;
 
     for (auto i : fen) {
 
-        if (i == '/') {
-            rank += 1;
-            file = 0;
-            continue;
-        }
-
-        board_index = rank*8 + file;
+        // calculates index on chess board with [0] being the bottom left and [63] being the top right
+        board_index = rank*8 - file;
         
+        // based on FEN string conventions, will set bit in piece bitstrings to 1 based on pos in FEN
         switch (i) {
-
         case 'p':
-            bp_board[board_index] = 1;
-            file++;
+            piece_boards[colorIndex::black + pieceIndex::pawn][board_index] = 1;
+            file--;
             break;
         
         case 'r':
-            br_board[board_index] = 1;
-            file++;
+            piece_boards[colorIndex::black + pieceIndex::rook][board_index] = 1;
+            file--;
             break;
 
         case 'n':
-            bn_board[board_index] = 1;
-            file++;
+            piece_boards[colorIndex::black + pieceIndex::knight][board_index] = 1;
+            file--;
             break;
 
         case 'b':
-            bb_board[board_index] = 1;
-            file++;
+            piece_boards[colorIndex::black + pieceIndex::bishop][board_index] = 1;
+            file--;
             break;
 
         case 'q':
-            bq_board[board_index] = 1;
-            file++;
+            piece_boards[colorIndex::black + pieceIndex::queen][board_index] = 1;
+            file--;
             break;
 
         case 'k':
-            bk_board[board_index] = 1;
-            file++;
+            piece_boards[colorIndex::black + pieceIndex::king][board_index] = 1;
+            file--;
             break;
 
         case 'P':
-            wp_board[board_index] = 1;
-            file++;
+            piece_boards[colorIndex::white + pieceIndex::pawn][board_index] = 1;
+            file--;
             break;
         
         case 'R':
-            wr_board[board_index] = 1;
-            file++;
+            piece_boards[colorIndex::white + pieceIndex::rook][board_index] = 1;
+            file--;
             break;
 
         case 'N':
-            wn_board[board_index] = 1;
-            file++;
+            piece_boards[colorIndex::white + pieceIndex::knight][board_index] = 1;
+            file--;
             break;
 
         case 'B':
-            wb_board[board_index] = 1;
-            file++;
+            piece_boards[colorIndex::white + pieceIndex::bishop][board_index] = 1;
+            file--;
             break;
 
         case 'Q':
-            wq_board[board_index] = 1;
-            file++;
+            piece_boards[colorIndex::white + pieceIndex::queen][board_index] = 1;
+            file--;
             break;
 
         case 'K':
-            wk_board[board_index] = 1;
-            file++;
+            piece_boards[colorIndex::white + pieceIndex::king][board_index] = 1;
+            file--;
+            break;
+
+        case '/': 
+            rank -= 1;
+            file = 8;
             break;
 
         default:
+            // if the FEN char is a digit, must displace file (column) by this by "i" amount
             if (isdigit(i)) {
                 file += (i - '0');
             }
             break;
         }
     }
-    print_bitstring_pieces_board(wk_board);
+    print_bitstring_pieces_board(piece_boards[11]);
 }
 
-void Board::print_bitstring_pieces_board(std::bitset<64> bitset) {
+void Board::reset_boards() {
 
-        for (int i = 0; i < 64; i++) {
-            if (i != 0 && (i % 8) == 0) {
-                std::cout << "\n";
-            }
+}
 
-            if (bitset[i] == 0) {
-                std::cout << "0 ";
-            }
-            else {
-                std::cout << "1 ";
-            }
-        }
+// testing function, could be fixed up TODO
+void Board::print_bitstring_pieces_board(std::bitset<64> &bitset) {
+
+    int board_index = 0;
+
+       for (int r = 7; r >= 0; r--) {
+           for (int f = 0; f < 8; f++) {
+
+               board_index = r*8 + f;
+
+               if (bitset[board_index] == 0) {
+                   std::cout << "- ";
+               }
+               else {
+                   std::cout << "1 ";
+               }
+           }
+           std::cout << "\n";
+       }
         std::cout << "\n\n";
 }
 void  Board::print_game_board() {
     
     std::bitset<64> game_board;
 
-    // performs bit-wise logical OR operation to collect all positions from piece bitsets
-    game_board = wp_board |
-                 wr_board |
-                 wb_board |
-                 wn_board |
-                 wq_board |
-                 wk_board |
-                 bp_board |
-                 br_board |
-                 bb_board |
-                 bn_board |
-                 bq_board |
-                 bk_board;
+    for (auto i : piece_boards) {
+
+        game_board = game_board | i;
+    }
     
     print_bitstring_pieces_board(game_board);
 }

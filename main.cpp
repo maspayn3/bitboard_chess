@@ -4,9 +4,6 @@
 #include "Board.h"
 
 
-
-
-
 // With this setup we can check a pieces type and color with bit operations
 enum Pieces {
     None = 0,
@@ -20,11 +17,6 @@ enum Pieces {
     Black = 16,
 };
 
-class Piece {
-
-private:
-    int piece;
-};
 
 int main () {
 
