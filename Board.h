@@ -1,11 +1,23 @@
 #include <iostream>
 #include <bitset>
-    
+
+namespace constants {
+    const int PIECE_COUNT = 12;
+    const int SQUARE_COUNT = 64;
+    const int FILE_COUNT = 8;
+    const int RANK_COUNT = 8;
+}
+
 
 #define STARTING_FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
 
-
 // end of fen  "w KQkq - 0 1"
+
+/*
+squareIndex {0..63} = 8*rankIndex + fileIndex;
+rankIndex   {0..7}  = squareIndex div 8; // squareIndex >> 3;
+fileIndex   {0..7}  = squareIndex mod 8; // squareIndex & 7;
+*/
 
 enum rankfile {
   a1, b1, c1, d1, e1, f1, g1, h1,
@@ -32,17 +44,21 @@ public:
     Board ();
     void reset_boards();
     void load_from_fen(std::string fen);
-    void print_bitstring_pieces_board(std::bitset<64> &bitset);
+    void print_bitstring_pieces_board(std::bitset<64> &board);
+    std::bitset<64> occupied_board();
+    void set_color_boards();
     void print_game_board();
+    bool get_bit(std::bitset<64> &board, int square);
 
 
 
 private:
 
-    // index [0-5]: black  [6-12]: white
+    // index [0-5]: black  [6-11]: white
     // order of pieces p, r, b, n, q, k
     std::bitset<64> piece_boards[12];
-
+    std::bitset<64> black_pieces;
+    std::bitset<64> white_pieces;
 
 };
 
