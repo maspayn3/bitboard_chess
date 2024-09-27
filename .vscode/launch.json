@@ -9,10 +9,10 @@
             "name": "g++-11 - Build and debug active file",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${fileDirname}/main",
+            "program": "${workspaceFolder}/chess",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${fileDirname}",
+            "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
@@ -23,8 +23,8 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "C/C++: g++-11 build active file",
-            "miDebuggerPath": "/bin/gdb"
+            "preLaunchTask": "Make: build project",
+            "miDebuggerPath": "/usr/bin/gdb"
         }
     ]
 }

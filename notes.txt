@@ -9,6 +9,8 @@ noWe         nort         noEa
           -9    -8    -7
   soWe         sout         soEa
 
+
+NOTE: NOT USING THIS ANYMORE
 enum enumSquare {
   a1(0), b1, c1, d1, e1, f1, g1, h1,
   a2, b2, c2, d2, e2, f2, g2, h2,
@@ -19,3 +21,40 @@ enum enumSquare {
   a7, b7, c7, d7, e7, f7, g7, h7,
   a8, b8, c8, d8, e8, f8, g8, h8 (63)
 };
+
+FEN Notation: https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation
+
+
+Make:
+
+  %: 
+  $^
+  $@
+
+
+  Rule structure:
+    target : prerequisite
+
+  We can actually build the program with Make through the VSCode debugger via tasks.json
+
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "Make: build project",
+            "command": "make",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Task to build the project using Makefile"
+        }
+    ]
+}

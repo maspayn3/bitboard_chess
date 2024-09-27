@@ -19,10 +19,10 @@ enum Pieces {
 
 
 int main () {
-
     Board hello;
 
     hello.load_from_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+    hello.set_color_boards();
     hello.print_game_board();
     return 0;
 }
